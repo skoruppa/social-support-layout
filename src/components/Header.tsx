@@ -1,23 +1,47 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, Search, CalendarDays, Archive, Contact, FileText, Folder } from 'lucide-react';
+import { Menu, X, Search, CalendarDays, Archive, Contact, FileText, Folder, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
-interface NavigationItem {
+interface NavigationSubItem {
   name: string;
   href: string;
   icon?: React.ElementType;
 }
 
+interface NavigationItem {
+  name: string;
+  href?: string;
+  icon?: React.ElementType;
+  children?: NavigationSubItem[];
+}
+
 const navigation: NavigationItem[] = [
   { name: 'Strona główna', href: '/' },
-  { name: 'Wydarzenia 2025', href: '/events-2025', icon: CalendarDays },
-  { name: 'Archiwum', href: '/archive', icon: Archive },
+  { 
+    name: 'Wydarzenia', 
+    children: [
+      { name: 'Wydarzenia 2025', href: '/events-2025', icon: CalendarDays },
+      { name: 'Archiwum', href: '/archive', icon: Archive },
+    ]
+  },
   { name: 'Kontakt', href: '/contact', icon: Contact },
   { name: 'RODO', href: '/rodo', icon: FileText },
-  { name: 'Projekty', href: '/projects', icon: Folder },
+  { 
+    name: 'Projekty', 
+    children: [
+      { name: 'Projekty', href: '/projects', icon: Folder },
+      { name: 'Projekty EU', href: '/projects', icon: Folder },
+    ]
+  },
   { name: 'Deklaracja Dostępności Cyfrowej', href: '/accessibility-declaration', icon: FileText },
 ];
 
@@ -48,6 +72,14 @@ const Header: React.FC = () => {
     }
   };
 
+  const isActive = (item: NavigationItem): boolean => {
+    if (item.href && location.pathname === item.href) return true;
+    if (item.children) {
+      return item.children.some(child => location.pathname === child.href);
+    }
+    return false;
+  };
+
   return (
     <header
       className={cn(
@@ -69,20 +101,55 @@ const Header: React.FC = () => {
         <div className="hidden md:flex items-center space-x-8">
           <nav className="flex space-x-6">
             {navigation.map((item, index) => (
-              <Link
-                key={item.name}
-                to={item.href}
-                className={cn(
-                  'text-sm font-medium transition-all duration-200 hover:text-primary relative py-2',
-                  'after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-primary after:scale-x-0 after:transition-transform after:duration-300',
-                  'hover:after:scale-x-100',
-                  location.pathname === item.href ? 'text-primary after:scale-x-100' : 'text-foreground/80',
-                  'animate-slide-in'
+              <React.Fragment key={item.name}>
+                {item.children ? (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger className={cn(
+                      'flex items-center text-sm font-medium transition-all duration-200 py-2',
+                      'hover:text-primary',
+                      isActive(item) ? 'text-primary' : 'text-foreground/80',
+                      'animate-slide-in'
+                    )}
+                    style={{ animationDelay: `${index * 0.05}s` }}
+                    >
+                      {item.name}
+                      <ChevronDown className="ml-1 h-4 w-4" />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="center" className="w-48 bg-white shadow-md">
+                      {item.children.map((child) => (
+                        <DropdownMenuItem key={child.name} asChild>
+                          <Link
+                            to={child.href}
+                            className={cn(
+                              'flex w-full items-center px-3 py-2 text-sm transition-colors',
+                              location.pathname === child.href
+                                ? 'bg-blue-50 text-primary'
+                                : 'hover:bg-blue-50/50 hover:text-primary'
+                            )}
+                          >
+                            {child.icon && <child.icon className="mr-2 h-4 w-4" />}
+                            {child.name}
+                          </Link>
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                  <Link
+                    to={item.href!}
+                    className={cn(
+                      'text-sm font-medium transition-all duration-200 hover:text-primary relative py-2',
+                      'after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-primary after:scale-x-0 after:transition-transform after:duration-300',
+                      'hover:after:scale-x-100',
+                      location.pathname === item.href ? 'text-primary after:scale-x-100' : 'text-foreground/80',
+                      'animate-slide-in'
+                    )}
+                    style={{ animationDelay: `${index * 0.05}s` }}
+                  >
+                    {item.name}
+                  </Link>
                 )}
-                style={{ animationDelay: `${index * 0.05}s` }}
-              >
-                {item.name}
-              </Link>
+              </React.Fragment>
             ))}
           </nav>
           
@@ -137,20 +204,46 @@ const Header: React.FC = () => {
               </button>
             </form>
 
+            {/* Mobile Menu Items */}
             {navigation.map((item, index) => (
-              <Link
-                key={item.name}
-                to={item.href}
-                className={cn(
-                  'py-2 px-3 text-base font-medium transition-colors duration-200',
-                  location.pathname === item.href
-                    ? 'text-primary bg-blue-50 rounded-md'
-                    : 'text-foreground/80 hover:text-primary hover:bg-blue-50/50 rounded-md'
+              <div key={item.name} className="py-1">
+                {item.children ? (
+                  <div className="space-y-2">
+                    <div className="font-medium text-foreground/90 px-3 py-1">
+                      {item.name}
+                    </div>
+                    <div className="pl-6 space-y-2">
+                      {item.children.map((child) => (
+                        <Link
+                          key={child.name}
+                          to={child.href}
+                          className={cn(
+                            'flex items-center py-2 px-3 text-sm font-medium transition-colors duration-200 rounded-md',
+                            location.pathname === child.href
+                              ? 'text-primary bg-blue-50'
+                              : 'text-foreground/80 hover:text-primary hover:bg-blue-50/50'
+                          )}
+                        >
+                          {child.icon && <child.icon className="mr-2 h-4 w-4" />}
+                          {child.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <Link
+                    to={item.href!}
+                    className={cn(
+                      'py-2 px-3 text-base font-medium transition-colors duration-200 block rounded-md',
+                      location.pathname === item.href
+                        ? 'text-primary bg-blue-50'
+                        : 'text-foreground/80 hover:text-primary hover:bg-blue-50/50'
+                    )}
+                  >
+                    {item.name}
+                  </Link>
                 )}
-                style={{ animationDelay: `${index * 0.05}s` }}
-              >
-                {item.name}
-              </Link>
+              </div>
             ))}
           </div>
         </div>
