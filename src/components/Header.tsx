@@ -5,11 +5,14 @@ import { Menu, X, Search, CalendarDays, Archive, Contact, FileText, Folder, Chev
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu";
 
 interface NavigationSubItem {
   name: string;
@@ -72,12 +75,8 @@ const Header: React.FC = () => {
     }
   };
 
-  const isActive = (item: NavigationItem): boolean => {
-    if (item.href && location.pathname === item.href) return true;
-    if (item.children) {
-      return item.children.some(child => location.pathname === child.href);
-    }
-    return false;
+  const isActive = (href: string): boolean => {
+    return location.pathname === href;
   };
 
   return (
@@ -95,7 +94,7 @@ const Header: React.FC = () => {
           className="animate-fade-in flex items-center"
         >
           <img 
-            src="/lovable-uploads/d76d6e5d-b109-4ebb-b8c9-fc742973cfd5.png" 
+            src="/lovable-uploads/8e266038-de0c-4b24-8846-2eccb6dd5ba7.png" 
             alt="Dom Pomocy Społecznej w Jaworznie" 
             className="h-14"
           />
@@ -103,59 +102,58 @@ const Header: React.FC = () => {
 
         {/* Desktop Navigation with Search */}
         <div className="hidden md:flex items-center space-x-8">
-          <nav className="flex space-x-6">
-            {navigation.map((item, index) => (
-              <React.Fragment key={item.name}>
-                {item.children ? (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger className={cn(
-                      'flex items-center text-sm font-medium transition-all duration-200 py-2',
-                      'hover:text-primary',
-                      isActive(item) ? 'text-primary' : 'text-foreground/80',
-                      'animate-slide-in'
-                    )}
-                    style={{ animationDelay: `${index * 0.05}s` }}
+          <NavigationMenu>
+            <NavigationMenuList className="space-x-4">
+              {navigation.map((item, index) => (
+                <NavigationMenuItem key={item.name}>
+                  {item.children ? (
+                    <>
+                      <NavigationMenuTrigger 
+                        className={cn(
+                          'text-sm font-medium transition-all duration-200',
+                          'hover:text-primary',
+                          item.children.some(child => isActive(child.href)) ? 'text-primary' : 'text-foreground/80'
+                        )}
+                      >
+                        {item.name}
+                      </NavigationMenuTrigger>
+                      <NavigationMenuContent>
+                        <ul className="grid w-[220px] gap-2 p-2">
+                          {item.children.map((child) => (
+                            <li key={child.name}>
+                              <Link
+                                to={child.href}
+                                className={cn(
+                                  'flex items-center rounded-md px-3 py-2 text-sm transition-colors',
+                                  isActive(child.href)
+                                    ? 'bg-blue-50 text-primary'
+                                    : 'text-foreground/80 hover:bg-blue-50/50 hover:text-primary'
+                                )}
+                              >
+                                {child.icon && <child.icon className="mr-2 h-4 w-4" />}
+                                {child.name}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </NavigationMenuContent>
+                    </>
+                  ) : (
+                    <Link
+                      to={item.href!}
+                      className={cn(
+                        navigationMenuTriggerStyle(),
+                        'text-sm font-medium transition-all duration-200',
+                        isActive(item.href!) ? 'text-primary' : 'text-foreground/80'
+                      )}
                     >
                       {item.name}
-                      <ChevronDown className="ml-1 h-4 w-4" />
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="center" className="w-48 bg-white shadow-md">
-                      {item.children.map((child) => (
-                        <DropdownMenuItem key={child.name} asChild>
-                          <Link
-                            to={child.href}
-                            className={cn(
-                              'flex w-full items-center px-3 py-2 text-sm transition-colors',
-                              location.pathname === child.href
-                                ? 'bg-blue-50 text-primary'
-                                : 'hover:bg-blue-50/50 hover:text-primary'
-                            )}
-                          >
-                            {child.icon && <child.icon className="mr-2 h-4 w-4" />}
-                            {child.name}
-                          </Link>
-                        </DropdownMenuItem>
-                      ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                ) : (
-                  <Link
-                    to={item.href!}
-                    className={cn(
-                      'text-sm font-medium transition-all duration-200 hover:text-primary relative py-2',
-                      'after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-primary after:scale-x-0 after:transition-transform after:duration-300',
-                      'hover:after:scale-x-100',
-                      location.pathname === item.href ? 'text-primary after:scale-x-100' : 'text-foreground/80',
-                      'animate-slide-in'
-                    )}
-                    style={{ animationDelay: `${index * 0.05}s` }}
-                  >
-                    {item.name}
-                  </Link>
-                )}
-              </React.Fragment>
-            ))}
-          </nav>
+                    </Link>
+                  )}
+                </NavigationMenuItem>
+              ))}
+            </NavigationMenuList>
+          </NavigationMenu>
           
           <form onSubmit={handleSearch} className="relative">
             <Input
@@ -223,7 +221,7 @@ const Header: React.FC = () => {
                           to={child.href}
                           className={cn(
                             'flex items-center py-2 px-3 text-sm font-medium transition-colors duration-200 rounded-md',
-                            location.pathname === child.href
+                            isActive(child.href)
                               ? 'text-primary bg-blue-50'
                               : 'text-foreground/80 hover:text-primary hover:bg-blue-50/50'
                           )}
@@ -239,7 +237,7 @@ const Header: React.FC = () => {
                     to={item.href!}
                     className={cn(
                       'py-2 px-3 text-base font-medium transition-colors duration-200 block rounded-md',
-                      location.pathname === item.href
+                      isActive(item.href!)
                         ? 'text-primary bg-blue-50'
                         : 'text-foreground/80 hover:text-primary hover:bg-blue-50/50'
                     )}

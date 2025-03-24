@@ -15,12 +15,6 @@ const Hero: React.FC = () => {
       
       <div className="container mx-auto px-4 z-10 pt-20 pb-12 md:py-20">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-block animate-fade-in">
-            <span className="inline-block py-1 px-3 mb-6 rounded-full bg-blue-100 text-blue-700 text-xs font-medium tracking-wider uppercase">
-              Dom Pomocy Społecznej
-            </span>
-          </div>
-          
           <h1 className="heading-1 mb-6 animate-fade-up">
             Profesjonalna opieka <br className="hidden sm:inline" />
             <span className="text-primary">z sercem i troską</span>
