@@ -17,33 +17,6 @@ const Footer: React.FC = () => {
   return (
     <footer className="bg-blue-900 text-white pt-16 pb-8">
       <div className="container mx-auto px-4">
-        {/* BIP Banner */}
-        <div className="flex justify-center mb-10">
-          <a 
-            href="https://www.bip.gov.pl/" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="flex items-center bg-white text-blue-800 px-5 py-3 rounded-lg hover:bg-blue-50 transition-colors"
-            aria-label="Biuletyn Informacji Publicznej"
-          >
-            <div className="flex items-center">
-              <div className="mr-3">
-                <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect width="100" height="100" rx="8" fill="#0066CC" />
-                  <path d="M25 30H75V70H25V30Z" fill="white" />
-                  <path d="M35 40H65V60H35V40Z" fill="#0066CC" />
-                  <path d="M45 45H55V55H45V45Z" fill="white" />
-                </svg>
-              </div>
-              <div className="font-semibold">
-                <span className="block text-sm">Biuletyn</span>
-                <span className="block text-sm">Informacji Publicznej</span>
-              </div>
-            </div>
-            <LinkIcon className="ml-2 h-4 w-4" />
-          </a>
-        </div>
-
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           <div>
             <h3 className="font-heading text-xl font-semibold mb-6">Dom Pomocy Społecznej w Jaworznie</h3>
@@ -95,7 +68,7 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="font-heading text-xl font-semibold mb-6">Bądź na bieżąco</h3>
             <p className="mb-6">Śledź nas w mediach społecznościowych, aby być na bieżąco z aktualnościami i wydarzeniami w naszym domu.</p>
-            <div className="flex space-x-4">
+            <div className="flex space-x-4 mb-8">
               <a 
                 href="https://facebook.com" 
                 target="_blank" 
@@ -106,6 +79,31 @@ const Footer: React.FC = () => {
                 <Facebook className="h-5 w-5" />
               </a>
             </div>
+            
+            {/* BIP Banner moved here */}
+            <a 
+              href="https://www.bip.gov.pl/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="flex items-center bg-white text-blue-800 px-5 py-3 rounded-lg hover:bg-blue-50 transition-colors w-fit"
+              aria-label="Biuletyn Informacji Publicznej"
+            >
+              <div className="flex items-center">
+                <div className="mr-3">
+                  <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="100" height="100" rx="8" fill="#0066CC" />
+                    <path d="M25 30H75V70H25V30Z" fill="white" />
+                    <path d="M35 40H65V60H35V40Z" fill="#0066CC" />
+                    <path d="M45 45H55V55H45V45Z" fill="white" />
+                  </svg>
+                </div>
+                <div className="font-semibold">
+                  <span className="block text-sm">Biuletyn</span>
+                  <span className="block text-sm">Informacji Publicznej</span>
+                </div>
+              </div>
+              <LinkIcon className="ml-2 h-4 w-4" />
+            </a>
           </div>
         </div>
         

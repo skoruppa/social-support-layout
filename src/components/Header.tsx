@@ -39,7 +39,7 @@ const navigation: NavigationItem[] = [
     name: 'Projekty', 
     children: [
       { name: 'Projekty', href: '/projects', icon: Folder },
-      { name: 'Projekty EU', href: '/projects', icon: Folder },
+      { name: 'Projekty EU', href: '/projects-eu', icon: Folder },
     ]
   },
   { name: 'Deklaracja Dostępności Cyfrowej', href: '/accessibility-declaration', icon: FileText },
@@ -92,9 +92,13 @@ const Header: React.FC = () => {
       <div className="container mx-auto px-4 flex items-center justify-between">
         <Link 
           to="/" 
-          className="text-primary font-heading text-2xl font-bold animate-fade-in"
+          className="animate-fade-in flex items-center"
         >
-          DPS Jaworzno
+          <img 
+            src="/lovable-uploads/d76d6e5d-b109-4ebb-b8c9-fc742973cfd5.png" 
+            alt="Dom Pomocy Społecznej w Jaworznie" 
+            className="h-14"
+          />
         </Link>
 
         {/* Desktop Navigation with Search */}
