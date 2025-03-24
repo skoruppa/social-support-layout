@@ -1,20 +1,24 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, Search } from 'lucide-react';
+import { Menu, X, Search, CalendarDays, Archive, Contact, FileText, Folder } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 
 interface NavigationItem {
   name: string;
   href: string;
+  icon?: React.ElementType;
 }
 
 const navigation: NavigationItem[] = [
   { name: 'Strona główna', href: '/' },
-  { name: 'Aktualności', href: '/news' },
-  { name: 'Artykuły', href: '/articles' },
-  { name: 'Kontakt', href: '/contact' },
+  { name: 'Wydarzenia 2025', href: '/events-2025', icon: CalendarDays },
+  { name: 'Archiwum', href: '/archive', icon: Archive },
+  { name: 'Kontakt', href: '/contact', icon: Contact },
+  { name: 'RODO', href: '/rodo', icon: FileText },
+  { name: 'Projekty', href: '/projects', icon: Folder },
+  { name: 'Deklaracja Dostępności Cyfrowej', href: '/accessibility-declaration', icon: FileText },
 ];
 
 const Header: React.FC = () => {
@@ -63,7 +67,7 @@ const Header: React.FC = () => {
 
         {/* Desktop Navigation with Search */}
         <div className="hidden md:flex items-center space-x-8">
-          <nav className="flex space-x-8">
+          <nav className="flex space-x-6">
             {navigation.map((item, index) => (
               <Link
                 key={item.name}
