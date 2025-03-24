@@ -34,7 +34,7 @@ const NewsGrid: React.FC<NewsGridProps> = ({ news, className }) => {
           key={item.id}
           news={item}
           className="animate-fade-up"
-          animationDelay={`${index * 0.05}s`}
+          style={{ animationDelay: `${index * 0.05}s` }}
         />
       ))}
     </div>

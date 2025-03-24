@@ -89,7 +89,7 @@ const SearchResults: React.FC = () => {
           </div>
           
           {results.length > 0 ? (
-            <NewsGrid newsItems={results} />
+            <NewsGrid news={results} />
           ) : (
             <div className="text-center py-16">
               <p className="text-xl text-foreground/70 mb-4">Niestety, nie znaleźliśmy żadnych treści pasujących do Twojego wyszukiwania.</p>

@@ -11,14 +11,16 @@ export interface NewsItem {
   date: string;
   image: string;
   slug: string;
+  category?: string;
 }
 
 interface NewsCardProps {
   news: NewsItem;
   className?: string;
+  style?: React.CSSProperties;
 }
 
-const NewsCard: React.FC<NewsCardProps> = ({ news, className }) => {
+const NewsCard: React.FC<NewsCardProps> = ({ news, className, style }) => {
   return (
     <article 
       className={cn(
@@ -27,6 +29,7 @@ const NewsCard: React.FC<NewsCardProps> = ({ news, className }) => {
         "transform-gpu hover:translate-y-[-5px]",
         className
       )}
+      style={style}
     >
       <div className="aspect-video overflow-hidden">
         <img 

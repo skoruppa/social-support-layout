@@ -66,7 +66,7 @@ const Index: React.FC = () => {
               </Button>
             </div>
             
-            <NewsGrid newsItems={sampleNews} />
+            <NewsGrid news={sampleNews} />
           </div>
         </section>
         
